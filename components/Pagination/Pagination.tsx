@@ -1,23 +1,26 @@
-import ReactPaginate from "react-paginate";
+'use client';
 
-interface PaginationProps {
+import ReactPaginate from 'react-paginate';
+
+type Props = {
   pageCount: number;
   currentPage: number;
-  onPageChange: (page: number) => void;
-}
+  onPageChange: (selected: number) => void;
+};
 
 export default function Pagination({
   pageCount,
   currentPage,
   onPageChange,
-}: PaginationProps) {
+}: Props) {
   return (
     <ReactPaginate
       pageCount={pageCount}
       forcePage={currentPage - 1}
-      onPageChange={(e) => onPageChange(e.selected + 1)}
-      previousLabel={"Prev"}
-      nextLabel={"Next"}
+      onPageChange={(event) => onPageChange(event.selected + 1)}
+      previousLabel={'←'}
+      nextLabel={'→'}
+      breakLabel={'...'}
     />
   );
 }
