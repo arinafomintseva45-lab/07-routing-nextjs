@@ -1,16 +1,30 @@
-import css from './styles.module.css';
+import './styles.module.css';
 
-export default function Layout({
+import Header from '@/components/Header/Header';
+import Footer from '@/components/Footer/Footer';
+import TanStackProvider from '@/components/TanStackProvider/TanStackProvider';
+
+export default function RootLayout({
   children,
-  sidebar,
+  modal,
 }: {
   children: React.ReactNode;
-  sidebar: React.ReactNode;
+  modal: React.ReactNode;
 }) {
   return (
-    <section className={css.container}>
-      <aside className={css.sidebar}>{sidebar}</aside>
-      <div className={css.notesWrapper}>{children}</div>
-    </section>
+    <html lang="en">
+      <body>
+        <TanStackProvider>
+          <Header />
+
+          <main>
+            {children}
+            {modal}
+          </main>
+
+          <Footer />
+        </TanStackProvider>
+      </body>
+    </html>
   );
 }

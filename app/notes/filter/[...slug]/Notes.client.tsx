@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 import { fetchNotes } from '@/lib/api';
@@ -18,23 +18,31 @@ type Props = {
 export default function NotesClient({ tag }: Props) {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState(search);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+      setPage(1);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [search]);
+
   const { data } = useQuery({
-    queryKey: ['notes', tag, page, search],
+    queryKey: ['notes', tag, page, debouncedSearch],
     queryFn: () =>
       fetchNotes({
         tag: tag === 'all' ? undefined : tag,
         page,
-        search,
+        search: debouncedSearch,
       }),
   });
 
   return (
     <div>
-      <button onClick={() => setIsModalOpen(true)}>
-        + Create note
-      </button>
+      <button onClick={() => setIsModalOpen(true)}>+ Create</button>
 
       <SearchBox value={search} onChange={setSearch} />
 
@@ -43,9 +51,7 @@ export default function NotesClient({ tag }: Props) {
       <Pagination
         pageCount={data?.totalPages ?? 1}
         currentPage={page}
-        onPageChange={(selectedPage: number) =>
-          setPage(selectedPage)
-        }
+        onPageChange={(p: number) => setPage(p)}
       />
 
       {isModalOpen && (
