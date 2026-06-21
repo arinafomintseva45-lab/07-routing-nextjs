@@ -34,3 +34,23 @@ export const fetchNoteById = async (id: string): Promise<Note> => {
   const { data } = await axios.get<Note>(`${API}/notes/${id}`);
   return data;
 };
+
+export type CreateNoteData = {
+  title: string;
+  content: string;
+  tag: string;
+};
+
+export const createNote = async (
+  noteData: CreateNoteData,
+): Promise<Note> => {
+  const { data } = await axios.post<Note>(`${API}/notes`, noteData);
+  return data;
+};
+
+export const deleteNote = async (
+  id: string,
+): Promise<{ success: boolean }> => {
+  const { data } = await axios.delete(`${API}/notes/${id}`);
+  return data;
+};
