@@ -1,3 +1,7 @@
+import Header from '@/components/Header/Header';
+import Footer from '@/components/Footer/Footer';
+import TanStackProvider from '@/components/TanStackProvider/TanStackProvider';
+
 export default function RootLayout({
   children,
   modal,
@@ -8,8 +12,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
-        {modal}
+        <TanStackProvider>
+          <Header />
+
+          <main>
+            {children}
+            {modal}
+          </main>
+
+          <Footer />
+        </TanStackProvider>
       </body>
     </html>
   );
